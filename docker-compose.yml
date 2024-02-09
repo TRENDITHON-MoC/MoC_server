@@ -2,15 +2,12 @@ version: '3'
 services:
   web:
     image: moc/server
-    container_name: web
-		command: bash -c "
-      while ! nc -z mysql_db 3306; do sleep 1; done # db가 활성화 될 때까지 대기
-      && python manage.py makemigrations
-      && python manage.py migrate
-      && gunicorn MoC.wsgi:application -b 0.0.0.0:8000" # 서버 실행
+    container_name: mysql_db
+    command: bash -c "
+      while ! nc -z mysql_db 3306; do sleep 1; done && python manage.py makemigrations && python manage.py migrate && gunicorn [프로젝트 폴더].wsgi:application -b 0.0.0.0:8000" # 서버 실행
     ports:
       - "8000:8000"
-		restart: always
+    restart: always
     volumes:
       - .:/app
       - ./static:/app/static
@@ -27,7 +24,7 @@ services:
       - ./nginx.default.conf:/etc/nginx/conf.d/default.conf
       - ./static:/static
       - ./media:/media
-		restart: unless-stopped
+    restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
@@ -52,4 +49,4 @@ networks:
   server:
 
 volumes:
-	database:
+  database:
