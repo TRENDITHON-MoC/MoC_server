@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     image: moc/server
-    container_name: mysql_db
+    container_name: web
     command: bash -c "
       while ! nc -z mysql_db 3306; do sleep 1; done && python manage.py makemigrations && python manage.py migrate && gunicorn [프로젝트 폴더].wsgi:application -b 0.0.0.0:8000" # 서버 실행
     ports:
