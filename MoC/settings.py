@@ -27,6 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
+KAKAO_REST_API_KEY = config('KAKAO_REST_API_KEY')
+KAKAO_REDIRECT_URI = config('KAKAO_REDIRECT_URI')
+KAKAO_CLIENT_SECRET_KEY = config('KAKAO_CLIENT_SECRET_KEY')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -58,6 +62,9 @@ INSTALLED_APPS = [
 
     # simple-jwt
     'rest_framework_simplejwt',
+
+    'accounts',
+    'users',
 ]
 
 MIDDLEWARE = [
