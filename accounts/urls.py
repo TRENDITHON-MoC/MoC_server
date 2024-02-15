@@ -6,4 +6,5 @@ app_name = 'accounts'
 urlpatterns = [
     path('dev/kakao/', DevKakaoLoginView.as_view()),
     path('kakao/login/callback/', DevKaKaoCallbackView.as_view()),
+    path('token/refresh/', TokenRefreshView.as_view()),
 ]
