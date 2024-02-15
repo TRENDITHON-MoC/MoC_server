@@ -7,29 +7,17 @@ from ..models import *
 import requests
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from decouple import config
-
-
-class DevKakaoLoginView(APIView):
-    """
-    개발자용 카카오 로그인 뷰
-    """
-    def get(self, request):
-        kakao_api = "https://kauth.kakao.com/oauth/authorize?response_type=code"
-        redirect_uri = config('KAKAO_REDIRECT_URI')
-        client_id = config('KAKAO_REST_API_KEY')
-
-        return redirect(f"{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}")
     
 
-class DevKaKaoCallbackView(APIView):
+class KaKaoCallbackView(APIView):
     """
-    개발자용 액세스 토큰 발급 뷰
+    유저 카카오 로그인 뷰
     """
     def get(self, request):
         data = {
             "grant_type" : "authorization_code",
             "client_id" : config('KAKAO_REST_API_KEY'),
-            "redirect_uri" : config('KAKAO_REDIRECT_URI'),
+            # "redirect_uri" : config('KAKAO_REDIRECT_URI'),
             "code" : request.GET["code"]
         }
 
