@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-from django.conf import settings
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -36,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     kakao_id = models.CharField(max_length=30, unique=True, null = True)
     nickname = models.CharField(max_length=30, null = True) # 한글 10글자
-    native_profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+    native_profile_image = models.ImageField(upload_to = 'profileImages/', blank=True, null=True)
     kakao_profile_image = models.TextField(blank=True, null=True)
     profile_image_type = models.CharField(max_length = 60, choices = PROFILE_IMAGE_CHOICES, default= 'KAKAO')
     USERNAME_FIELD = 'kakao_id'
@@ -55,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             return self.kakao_profile_image
         elif self.profile_image_type == 'NATIVE':
             if self.native_profile_image:
-                return settings.MEDIA_URL + str(self.native_profile_image)
+                return self.native_profile_image
             else:
                 return None
         else:

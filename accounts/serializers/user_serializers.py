@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models import User
+from django.conf import settings
 
 class UserCreateSerailizer(serializers.ModelSerializer):
     """
@@ -14,6 +15,19 @@ class UserResponseSerializer(serializers.ModelSerializer):
     """
     유저 정보 응답 시리얼라이저
     """
+    profile_image = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ['id', 'nickname', 'profile_image']
+
+    def get_profile_image(self, obj):
+        request = self.context.get('request')
+        if obj.profile_image_type == 'NATIVE':
+            if obj.native_profile_image:
+                return request.build_absolute_uri(settings.MEDIA_URL + str(obj.native_profile_image))
+            else:
+                return None
+        elif obj.profile_image_type == 'KAKAO':
+            return obj.kakao_profile_image_url  # 가정한 필드 이름
+        else:
+            return None
