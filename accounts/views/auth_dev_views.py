@@ -63,7 +63,8 @@ class DevKaKaoCallbackView(APIView):
                 "data" : {
                     "user" : serializer.data,
                     "access_token" : access_token,
-                    "refresh_token" : refresh_token
+                    "refresh_token" : refresh_token,
+                    "exist_user" : True
                 }
             }
             return Response(res, status = status.HTTP_200_OK)
@@ -80,7 +81,8 @@ class DevKaKaoCallbackView(APIView):
             "data" : {
                 "user" : serializer.data,
                 "access_token" : access_token,
-                "refresh_token" : refresh_token
+                "refresh_token" : refresh_token,
+                "exist_user" : False
             }
         }
         return Response(res, status = status.HTTP_200_OK)
