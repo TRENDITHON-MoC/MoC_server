@@ -16,7 +16,7 @@ class KaKaoCallbackView(APIView):
         data = {
             "grant_type" : "authorization_code",
             "client_id" : config('KAKAO_REST_API_KEY'),
-            # "redirect_uri" : config('KAKAO_REDIRECT_URI'),
+            "redirect_uri" : "http://localhost:3000/login/token",
             "code" : request.GET["code"]
         }
 
