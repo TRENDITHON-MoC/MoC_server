@@ -54,7 +54,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.profile_image_type == 'KAKAO':
             return self.kakao_profile_image
         elif self.profile_image_type == 'NATIVE':
-            return settings.MEDIA_URL + str(self.native_profile_image)
+            if self.native_profile_image:
+                return settings.MEDIA_URL + str(self.native_profile_image)
+            else:
+                return None
         else:
             return None
     
