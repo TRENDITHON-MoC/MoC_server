@@ -40,7 +40,7 @@ class KaKaoCallbackView(APIView):
             if user.nickname != nickname:
                 user.nickname = nickname
             user.save()
-            serializer = UserResponseSerializer(user)
+            serializer = UserResponseSerializer(user, context = {'request' : request})
             token = TokenObtainPairSerializer.get_token(user)
             access_token = str(token.access_token)
             refresh_token = str(token)
@@ -57,7 +57,7 @@ class KaKaoCallbackView(APIView):
         
         new_user = User(kakao_id = kakao_id, kakao_profile_image = kakao_profile_image, nickname = nickname)
         new_user.save()
-        serializer = UserResponseSerializer(new_user)
+        serializer = UserResponseSerializer(new_user, context = {'request' : request})
         token = TokenObtainPairSerializer.get_token(new_user)
         access_token = str(token.access_token)
         refresh_token = str(token)
