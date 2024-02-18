@@ -1,7 +1,7 @@
 from django.db import models
 
 class Post(models.Model):
-    user = models.ForeignKey('accounts.User', null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.User', null=True, on_delete=models.CASCADE, related_name = 'posts')
     # 모델 만든 후에 작성
     # like = models.ForeignKey('Like', on_delete=models.SET_NULL, null=True, blank=True)
     # category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
