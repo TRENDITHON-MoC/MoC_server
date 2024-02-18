@@ -1,4 +1,14 @@
 from django.db import models
+import uuid
+
+def post_image_path(instance):
+    filename = f"{instance.post.pk}/{instance.pk}.jpeg"
+    return f'post_images/{filename}'
+
+def thumbnail_image_path(instance):
+    filename = f"{instance.post.pk}/thumbnail_{instance.pk}.jpeg"
+    return f'post_images/{filename}'
+
 
 class Post(models.Model):
     user = models.ForeignKey('accounts.User', null=True, on_delete=models.CASCADE, related_name = 'posts')
@@ -15,3 +25,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = "image")
+    image = models.ImageField(upload_to = post_image_path)
+
+
+class ThumbnailImage(models.Model):
+    post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = "thumbnail_image")
+    thumbnail_image = models.ImageField(upload_to = thumbnail_image_path)
