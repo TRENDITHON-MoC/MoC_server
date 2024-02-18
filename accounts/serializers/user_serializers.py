@@ -28,6 +28,9 @@ class UserResponseSerializer(serializers.ModelSerializer):
             else:
                 return None
         elif obj.profile_image_type == 'KAKAO':
-            return obj.kakao_profile_image_url  # 가정한 필드 이름
+            if obj.kakao_profile_image:
+                return obj.kakao_profile_image 
+            else:
+                return None
         else:
             return None

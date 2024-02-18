@@ -7,22 +7,23 @@ class UserManager(BaseUserManager):
     """
     유저 생성 매니저
     """
-    def create_user(self, google_id, password=None, **extra_fields):
+    def create_user(self, kakao_id, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
 
         # 사용자 생성 로직
-        user = self.model(google_id=google_id, **extra_fields)
+        user = self.model(kakao_id=kakao_id, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, google_id, password=None, **extra_fields):
+    def create_superuser(self, kakao_id, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("nickname", f"admin_{kakao_id}")
 
         # 슈퍼유저 생성 로직
-        return self.create_user(google_id, password, **extra_fields)
+        return self.create_user(kakao_id, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -44,6 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
     
     def __str__(self):
         return self.nickname
@@ -51,7 +54,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def profile_image(self):
         if self.profile_image_type == 'KAKAO':
-            return self.kakao_profile_image
+            if self.kakao_profile_image:
+                return self.kakao_profile_image
+            else:
+                return None
         elif self.profile_image_type == 'NATIVE':
             if self.native_profile_image:
                 return self.native_profile_image
