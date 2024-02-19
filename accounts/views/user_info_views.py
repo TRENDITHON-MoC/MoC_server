@@ -70,26 +70,3 @@ class UploadProfileView(APIView):
             "data" : UserResponseSerializer(request.user, context = {'request' : request}).data
         }
         return Response(res, status = status.HTTP_201_CREATED)
-    
-
-class MyPageView(APIView):
-    """
-    마이페이지에 필요한 정보를 출력하는 뷰
-    """
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        user_serializer = UserResponseSerializer(request.user)
-        post_serializer = PostListSerializer(request.user.posts.order_by('-created_at'), many = True, context = {'request' : request})
-        comment_serializer = CommentMyPageSerializer(request.user.comments.order_by('-created_at'), many = True)
-
-        res = {
-            "msg" : "마이페이지 정보 반환 성공",
-            "data" : {
-                "user_info" : user_serializer.data,
-                "post_list" : post_serializer.data,
-                "comment_list" : comment_serializer.data
-            }
-        }
-        return Response(res, status = status.HTTP_200_OK)
