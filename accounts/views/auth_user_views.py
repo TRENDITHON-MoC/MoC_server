@@ -13,12 +13,21 @@ class KaKaoCallbackView(APIView):
     유저 카카오 로그인 뷰
     """
     def get(self, request):
-        data = {
-            "grant_type" : "authorization_code",
-            "client_id" : config('KAKAO_REST_API_KEY'),
-            "redirect_uri" : "http://localhost:3000/login/token",
-            "code" : request.GET["code"]
-        }
+        referer = request.META.get('HTTP_REFERER', '')
+        if "localhost:3000" in referer:
+            data = {
+                "grant_type" : "authorization_code",
+                "client_id" : config('KAKAO_REST_API_KEY'),
+                "redirect_uri" : "http://localhost:3000/login/token",
+                "code" : request.GET["code"]
+            }
+        else:
+            data = {
+                "grant_type" : "authorization_code",
+                "client_id" : config('KAKAO_REST_API_KEY'),
+                "redirect_uri" : "https://momentcraft.site/login/token",
+                "code" : request.GET["code"]
+            }
 
         kakao_token_api = "https://kauth.kakao.com/oauth/token"
         response = requests.post(kakao_token_api, data=data).json()
