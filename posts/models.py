@@ -1,4 +1,5 @@
 from django.db import models
+from category.models import Category
 import uuid
 
 def post_image_path(instance):
@@ -13,8 +14,8 @@ def thumbnail_image_path(instance):
 class Post(models.Model):
     user = models.ForeignKey('accounts.User', null=True, on_delete=models.CASCADE, related_name = 'posts')
     # 모델 만든 후에 작성
-    # like = models.ForeignKey('Like', on_delete=models.SET_NULL, null=True, blank=True)
-    # category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
+    like = models.ManyToManyField('accounts.User', related_name = 'like_post')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name = 'posts')
     # daily = models.ForeignKey('Daily', on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=255)
     body = models.TextField()
