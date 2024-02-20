@@ -1,6 +1,6 @@
 from django.db import models
 from category.models import Category
-import uuid
+from daily.models import Daily
 
 def post_image_path(instance):
     filename = f"{instance.post.pk}/{instance.pk}.jpeg"
@@ -16,7 +16,7 @@ class Post(models.Model):
     # 모델 만든 후에 작성
     like = models.ManyToManyField('accounts.User', related_name = 'like_post')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name = 'posts')
-    # daily = models.ForeignKey('Daily', on_delete=models.SET_NULL, null=True, blank=True)
+    daily = models.ForeignKey(Daily, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=255)
     body = models.TextField()
     hashtags = models.CharField(max_length=255)
