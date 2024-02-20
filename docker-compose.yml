@@ -4,7 +4,7 @@ services:
     image: moc/server
     container_name: web
     command: bash -c "
-      while ! nc -z mysql_db 3306; do sleep 1; done && python manage.py makemigrations && python manage.py migrate && gunicorn MoC.wsgi:application -b 0.0.0.0:8000" # 서버 실행
+      while ! nc -z mysql_db 3306; do sleep 1; done && gunicorn MoC.wsgi:application -b 0.0.0.0:8000" # 서버 실행
     ports:
       - "8000:8000"
     restart: always
@@ -14,8 +14,6 @@ services:
       - ./media:/app/media
     networks:
       - server
-    depends_on:
-      - mysql_db
 
   nginx:
     image: nginx:latest
@@ -36,19 +34,6 @@ services:
       - server
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
-  mysql_db:
-    image: mysql:latest
-    container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: ${db_password}
-      MYSQL_DATABASE: moc
-    volumes:
-      - database:/var/lib/mysql
-    ports:
-      - "3305:3306"
-    networks:
-      - server
-
   certbot:
     image: certbot/certbot
     container_name: certbot
@@ -60,6 +45,3 @@ services:
 
 networks:
   server:
-
-volumes:
-  database:
