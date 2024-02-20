@@ -1,5 +1,4 @@
 from django.db import models
-from category.models import Category
 from daily.models import Daily
 
 def post_image_path(instance):
@@ -12,6 +11,22 @@ def thumbnail_image_path(instance):
 
 class Hashtag(models.Model):
     tags = models.CharField(max_length = 60, default = "")
+
+    def __str__(self):
+        return self.tags
+
+    class Meta:
+        db_table = 'hashtag'
+
+
+class Category(models.Model):
+    category_name = models.CharField(max_length = 60, default = "")
+
+    def __str__(self):
+        return self.category_name
+    
+    class Meta:
+        db_table = 'category'
 
 
 class Post(models.Model):
@@ -29,12 +44,21 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
+    class Meta:
+        db_table = 'post'
+    
 
 class PostImage(models.Model):
     post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = "image")
     image = models.ImageField(upload_to = post_image_path)
 
+    class Meta:
+        db_table = 'post_image'
+
 
 class ThumbnailImage(models.Model):
     post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = "thumbnail_image")
     thumbnail_image = models.ImageField(upload_to = thumbnail_image_path)
+
+    class Meta:
+        db_table = 'thumbnail_image'
