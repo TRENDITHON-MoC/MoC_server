@@ -10,10 +10,11 @@ from ..permissions import IsOwnerOrReadOnly
 
 
 def create_hashtag(word):
-    instance = Hashtag.objects.filter(tags = word)
+    instance = Hashtag.objects.filter(tags = word).first()
     if not instance:
         hashtag = Hashtag.objects.create(tags = word)
         return hashtag
+    return instance
 
 
 class PostCreateView(APIView):
@@ -25,9 +26,11 @@ class PostCreateView(APIView):
         daily = Daily.objects.last()
 
         hastags_word_list = request.data.getlist('hashtags')
+        print(hastags_word_list)
         hashtags_instance_list = []
         for h in hastags_word_list:
             hashtags_instance_list.append(create_hashtag(h))
+        print(hashtags_instance_list)
 
         serializer = PostRequestSerializer(data = request.data)
         if serializer.is_valid():
