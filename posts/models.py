@@ -10,16 +10,18 @@ def thumbnail_image_path(instance):
     filename = f"{instance.post.pk}/thumbnail_{instance.pk}.jpeg"
     return f'post_images/{filename}'
 
+class Hashtag(models.Model):
+    tags = models.CharField(max_length = 60, default = "")
+
 
 class Post(models.Model):
     user = models.ForeignKey('accounts.User', null=True, on_delete=models.CASCADE, related_name = 'posts')
-    # 모델 만든 후에 작성
     like = models.ManyToManyField('accounts.User', related_name = 'like_post')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name = 'posts')
     daily = models.ForeignKey(Daily, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=255)
     body = models.TextField()
-    hashtags = models.CharField(max_length=255)
+    hashtags = models.ManyToManyField(Hashtag, null = True)
     like_cnt = models.IntegerField(default=0)
     located = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
