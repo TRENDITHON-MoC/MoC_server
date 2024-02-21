@@ -26,12 +26,21 @@ class DevKaKaoCallbackView(APIView):
     개발자용 액세스 토큰 발급 뷰
     """
     def get(self, request):
-        data = {
-            "grant_type" : "authorization_code",
-            "client_id" : config('KAKAO_REST_API_KEY'),
-            "redirect_uri" : config('KAKAO_REDIRECT_URI'),
-            "code" : request.GET["code"]
-        }
+        referer = request.META.get('HTTP_REFERER', '')
+        if "localhost" in referer or "127.0.0.1" in referer:
+            data = {
+                "grant_type" : "authorization_code",
+                "client_id" : config('KAKAO_REST_API_KEY'),
+                "redirect_uri" : config('KAKAO_REDIRECT_URI'),
+                "code" : request.GET["code"]
+            }
+        else:
+            data = {
+                "grant_type" : "authorization_code",
+                "client_id" : config('KAKAO_REST_API_KEY'),
+                "redirect_uri" : "htts://momentcraft.site/accounts/kakao/login/callback/",
+                "code" : request.GET["code"]
+            }
 
         kakao_token_api = "https://kauth.kakao.com/oauth/token"
         response = requests.post(kakao_token_api, data=data).json()
