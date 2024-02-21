@@ -28,6 +28,8 @@ class KaKaoCallbackView(APIView):
         header = {"Authorization":f"Bearer ${kakao_token}"}
         user_information = requests.get(kakao_user_api, headers = header).json()
 
+        return Response(user_information)
+
         kakao_id = user_information['id']
         kakao_profile_image = user_information["kakao_account"]["profile"]["thumbnail_image_url"]
         nickname = user_information["properties"]["nickname"]
