@@ -24,7 +24,7 @@ class DevKakaoLoginView(APIView):
 class ServerDevLoginView(APIView):
     def get(self, request):
         kakao_api = "https://kauth.kakao.com/oauth/authorize?response_type=code"
-        redirect_uri = "htts://momentcraft.site/accounts/kakao/login/callback/"
+        redirect_uri = "https://momentcraft.site/accounts/kakao/login/callback/"
         client_id = config('KAKAO_REST_API_KEY')
 
         return redirect(f"{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}")    
@@ -47,7 +47,7 @@ class DevKaKaoCallbackView(APIView):
             data = {
                 "grant_type" : "authorization_code",
                 "client_id" : config('KAKAO_REST_API_KEY'),
-                "redirect_uri" : "htts://momentcraft.site/accounts/kakao/login/callback/",
+                "redirect_uri" : "https://momentcraft.site/accounts/kakao/login/callback/",
                 "code" : request.GET["code"]
             }
 
