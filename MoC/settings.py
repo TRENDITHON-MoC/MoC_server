@@ -61,11 +61,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
+    # utils
+    'django_crontab',
+
     # apps
     'accounts',
     'posts',
     'comments',
-    'category',
+    'daily',
 ]
 
 MIDDLEWARE = [
@@ -226,6 +229,12 @@ CORS_ALLOW_HEADERS=(
 CORS_ORIGIN_WHITELIST = [
 "http://localhost:3000",
 "http://127.0.0.1:8000"]
+
+CRONJOBS = [
+    ('0 0 1 * *', 'daily.cron.create_monthly_instance'),
+    ('0 0 * * 1', 'daily.cron.create_weekly_instance'),
+    ('0 0 * * *', 'daily.cron.create_daily_instance'),
+]
 
 
 try:

@@ -1,10 +1,23 @@
 from rest_framework import serializers
-from ..models import Post
-from comments.serializers.comments_serializers import CommentSerializer
+from ..models import Post, Hashtag
+from comments.serializers import CommentSerializer
 
-class PostSerializer(serializers.ModelSerializer):
+class HashtagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hashtag
+        fields = '__all__'
+
+
+class PostRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['category', 'title', 'body']
+
+
+class PostResponseSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
     owner = serializers.SerializerMethodField()
+    # hashtag = serializers.
     class Meta:
         model = Post
         fields = '__all__'
