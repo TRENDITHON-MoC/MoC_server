@@ -7,7 +7,7 @@ urlpatterns = [
     path('dev/kakao/', DevKakaoLoginView.as_view()), # 개발자 로그인
     path('dev/kakao/server/', ServerDevLoginView.as_view()),
     path('kakao/login/callback/', DevKaKaoCallbackView.as_view()), # 개발자 로그인 콜백
-    path('kakao/login/<str:code>/', KaKaoCallbackView.as_view()),
+    path('kakao/login/', KaKaoCallbackView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()), # 토큰 리프레시
     path('token/logout/', LogoutView.as_view()), # 로그아웃
     path('profileImage/upload/', UploadProfileView.as_view()), # MoC 프로필 이미지 업로드
