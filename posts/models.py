@@ -1,13 +1,10 @@
 from django.db import models
 from daily.models import Daily
+import uuid
 
-def post_image_path(instance):
-    filename = f"{instance.post.pk}/{instance.pk}.jpeg"
-    return f'post_images/{filename}'
-
-def thumbnail_image_path(instance):
-    filename = f"{instance.post.pk}/thumbnail_{instance.pk}.jpeg"
-    return f'post_images/{filename}'
+def post_image_path(instance, file_name):
+    post = instance.post
+    return f'post_images/{uuid.uuid4()}.jpeg'
 
 class Hashtag(models.Model):
     tags = models.CharField(max_length = 60, default = "")
@@ -55,10 +52,3 @@ class PostImage(models.Model):
     class Meta:
         db_table = 'post_image'
 
-
-class ThumbnailImage(models.Model):
-    post = models.ForeignKey(Post, on_delete = models.CASCADE, related_name = "thumbnail_image")
-    thumbnail_image = models.ImageField(upload_to = thumbnail_image_path)
-
-    class Meta:
-        db_table = 'thumbnail_image'

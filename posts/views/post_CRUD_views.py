@@ -23,17 +23,16 @@ class PostCreateView(APIView):
     """
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    def post(self, request, category_name):
+    def post(self, request, category_id):
         user = request.user
-        category = Category.objects.get(category_name = category_name)
+        category = Category.objects.get(pk = category_id)
         daily = Daily.objects.last()
 
-        hastags_word_list = request.data.getlist('hashtags')
+        hastags_word_list = request.data.get('hashtags')
         print(hastags_word_list)
         hashtags_instance_list = []
         for h in hastags_word_list:
             hashtags_instance_list.append(create_hashtag(h))
-        print(hashtags_instance_list)
 
         serializer = PostRequestSerializer(data = request.data)
         if serializer.is_valid():
@@ -62,20 +61,86 @@ class PostImageUploadView(APIView):
     def post(self, request, post_id):
         post = Post.objects.get(pk = post_id)
         self.check_object_permissions(request, post)
-
-        image_serializer = ImageRequestSerializer(data = request.data)
-        if not image_serializer.is_valid():
-            return Response(image_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-        image_list = image_serializer.validated_data
-        try:
-            for image in image_list:
-                PostImage(image = image, post = post).save()
-            post_serializer = PostResponseSerializer(post, context={'request': request})
-            return Response(post_serializer.data, status = status.HTTP_201_CREATED)
-        except:
-            res = {
-                "msg" : "이미지 형식은 올바르나 업로드 실패"
-            }
-            return Response(res, status = status.HTTP_400_BAD_REQUEST)
+        image_list = request.data.getlist('images')
+        for image in image_list:
+            post_image = PostImage(post = post, image = image)
+            post_image.save()
+        post_serializer = PostResponseSerializer(post, context={'request': request})
+        return Response(post_serializer.data, status = status.HTTP_201_CREATED)
         
+
+class PostUpdateView(APIView):
+    """
+    게시글 업데이트 뷰
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsOwnerOrReadOnly]
+    def put(self, request, post_id):
+        post = Post.objects.get(pk = post_id)
+        self.check_object_permissions(request, post)
+
+        added_hastags_list = request.data.get('added_hashtags')
+        removed_hastags_list = request.data.get('removed_hashtags')
+        removed_images_list = request.data.get('removed_images')
+
+        serializer = PostRequestSerializer(post, data = request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        
+        serializer.save()
+        
+        hashtags_instance_list = []
+        for h in added_hastags_list:
+            hashtags_instance_list.append(create_hashtag(h))
+
+        for ah in hashtags_instance_list:
+            post.hashtags.add(ah)
+        
+        for rh in removed_hastags_list:
+            post.hashtags.remove(Hashtag.objects.get(pk = rh))
+        
+        for ri in removed_images_list:
+            PostImage.objects.get(pk = ri).delete()
+
+        post.save()
+
+        res = {
+            "msg" : "게시글 수정 성공",
+            "data" : PostResponseSerializer(post, context = {'request':request}).data
+        }
+
+        return Response(res, status = status.HTTP_200_OK)
+    
+
+class PostDeleteView(APIView):
+    """
+    게시글 삭제 뷰
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsOwnerOrReadOnly]
+    def delete(self, request, post_id):
+        post = Post.objects.get(pk = post_id)
+        self.check_object_permissions(request, post)
+        post.delete()
+
+        res = {
+            "msg":"게시글 삭제 성공"
+        }
+        return Response(res, status=status.HTTP_204_NO_CONTENT)
+    
+
+class PostDetailView(APIView):
+    """
+    게시글 디테일 뷰
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request, post_id):
+        post = Post.objects.get(pk = post_id)
+
+        data = PostResponseSerializer(post, context = {'request':request}).data
+        res = {
+            "msg" : "게시글 세부사항 반환 성공",
+            "data" : data
+        }
+        return Response(res, status=status.HTTP_200_OK)
