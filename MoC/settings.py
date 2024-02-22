@@ -228,12 +228,18 @@ CORS_ALLOW_HEADERS=(
 
 CORS_ORIGIN_WHITELIST = [
 "http://localhost:3000",
-"http://127.0.0.1:8000"]
+"http://127.0.0.1:8000",
+"https://momentcraft.site"
+]
 
 CRONJOBS = [
     ('0 0 1 * *', 'daily.cron.create_monthly_instance'),
     ('0 0 * * 1', 'daily.cron.create_weekly_instance'),
     ('0 0 * * *', 'daily.cron.create_daily_instance'),
+]
+
+CSRF_TRUSTED_ORIGINS = [
+"https://momentcraft.site",
 ]
 
 
