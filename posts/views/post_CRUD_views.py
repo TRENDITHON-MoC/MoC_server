@@ -133,8 +133,6 @@ class PostDetailView(APIView):
     """
     게시글 디테일 뷰
     """
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
     def get(self, request, post_id):
         post = Post.objects.get(pk = post_id)
 

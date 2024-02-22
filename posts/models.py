@@ -6,6 +6,10 @@ def post_image_path(instance, file_name):
     post = instance.post
     return f'post_images/{uuid.uuid4()}.jpeg'
 
+def thumbnail_image_path(instance, filename):
+    # 예시: "post_thumbnails/{post_id}/{filename}"
+    return 'post_thumbnails/{0}/{1}'.format(instance.post.id, filename)
+
 class Hashtag(models.Model):
     tags = models.CharField(max_length = 60, default = "")
 
