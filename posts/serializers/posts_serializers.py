@@ -15,10 +15,9 @@ class PostRequestSerializer(serializers.ModelSerializer):
 
 
 class ImageRequestSerializer(serializers.ModelSerializer):
-    images = serializers.ListField(child = serializers.ImageField())
     class Meta:
         model = PostImage
-        fields = ['images']
+        fields = ['image']
 
 
 class ImageResponseSerializer(serializers.ModelSerializer):
@@ -29,7 +28,7 @@ class ImageResponseSerializer(serializers.ModelSerializer):
     def get_image(self, obj):
         if obj.image:
             request = self.context.get('request')
-            return request.build_absolute_uri(obj.review_image.url)
+            return request.build_absolute_uri(obj.image.url)
         return None
 
 
