@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Post, Hashtag
+from ..models import *
 from comments.serializers import CommentSerializer
 
 class HashtagSerializer(serializers.ModelSerializer):
@@ -11,13 +11,32 @@ class HashtagSerializer(serializers.ModelSerializer):
 class PostRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['category', 'title', 'body']
+        fields = ['title', 'body']
+
+
+class ImageRequestSerializer(serializers.ModelSerializer):
+    images = serializers.ListField(child = serializers.ImageField())
+    class Meta:
+        model = PostImage
+        fields = ['images']
+
+
+class ImageResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostImage
+        fields = ['id', 'image']
+
+    def get_image(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.review_image.url)
+        return None
 
 
 class PostResponseSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
-    owner = serializers.SerializerMethodField()
-    # hashtag = serializers.
+    hashtags = serializers.SerializerMethodField()
+    image = ImageResponseSerializer(many = True)
     class Meta:
         model = Post
         fields = '__all__'
@@ -26,12 +45,11 @@ class PostResponseSerializer(serializers.ModelSerializer):
         comments = obj.comments.filter(parent = None)
         serializer = CommentSerializer(comments, many = True)
         return serializer.data
-    
-    def get_owner(self, obj):
-        request = self.context.get('request')
-        if request:
-            if request.user == obj.user: return True
-        return False
+
+    def get_hashtags(self, obj):
+        tags = obj.hashtags.all()
+        serializer = HashtagSerializer(tags, many = True)
+        return serializer.data
     
 
 class PostListSerializer(serializers.ModelSerializer):
