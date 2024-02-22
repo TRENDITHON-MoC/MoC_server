@@ -8,7 +8,6 @@ class ReplySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    replies = ReplySerializer(many = True)
     class Meta:
         model = Comment
         fields = '__all__' 
