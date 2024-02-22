@@ -36,9 +36,9 @@ class Post(models.Model):
     daily = models.ForeignKey(Daily, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=255)
     body = models.TextField()
-    hashtags = models.ManyToManyField(Hashtag, null = True)
+    hashtags = models.ManyToManyField(Hashtag, null = True, related_name = 'posts')
     like_cnt = models.IntegerField(default=0)
-    located = models.BooleanField(default=False)
+    # located = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
