@@ -6,3 +6,4 @@ from .models import *
 admin.site.register(Monthly)
 admin.site.register(Weekly)
 admin.site.register(Daily)
+admin.site.register(PopularPost)

@@ -34,7 +34,7 @@ class Post(models.Model):
     user = models.ForeignKey('accounts.User', null=True, on_delete=models.CASCADE, related_name = 'posts')
     like = models.ManyToManyField('accounts.User', related_name = 'like_post')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name = 'posts')
-    daily = models.ForeignKey(Daily, on_delete=models.SET_NULL, null=True, blank=True)
+    daily = models.ForeignKey(Daily, on_delete=models.SET_NULL, null=True, blank=True, related_name = 'posts')
     title = models.CharField(max_length=255)
     body = models.TextField()
     hashtags = models.ManyToManyField(Hashtag, null = True, related_name = 'posts')
