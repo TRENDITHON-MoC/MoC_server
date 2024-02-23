@@ -25,7 +25,7 @@ class PopularTestView(APIView):
             PopularPost(daily = date, post = pp).save()
 
         res = {
-            "data" : PostListSerializer(popular_posts, many = True).data
+            "data" : PostListSerializer(popular_posts, many = True, context = {'request' : request}).data
         }
 
         return Response(res)
