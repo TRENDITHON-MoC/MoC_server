@@ -12,7 +12,7 @@ from datetime import timedelta
 
 class PopularPostView(APIView):
     def get(self, request):
-        yesterday = timezone.now().date() - timedelta(days=1)
+        yesterday = timezone.localtime(timezone.now()).date() - timedelta(days=1)
         date = Daily.objects.prefetch_related('popular_post').get(day = yesterday)
         popular_posts = date.popular_post.all()
         posts = [pp.post for pp in popular_posts]
