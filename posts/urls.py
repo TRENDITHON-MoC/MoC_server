@@ -11,5 +11,7 @@ urlpatterns = [
     path('delete/<int:post_id>/', PostDeleteView.as_view()), # 게시글 삭제
     path('detail/<int:post_id>/', PostDetailView.as_view()), # 게시글 세부사항
     path('list/<int:category_id>/', PostListView.as_view()), # 카테고리별 게시글 목록
-    path('like/<int:post_id>/', PostLikeView.as_view()),
+    path('like/<int:post_id>/', PostLikeView.as_view()), # 좋아요 등록/취소
+    path('search/words/', PostWordSearchView.as_view()), # 문장으로 게시글 검색
+    path('search/hashtag/<hashtag_id>/', PostTagSearchView.as_view()), # 해시태그로 게시글 검색
 ]
