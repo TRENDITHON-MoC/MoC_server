@@ -14,4 +14,5 @@ urlpatterns = [
     path('mypage/', MyPageView.as_view()),
     path('dev/kakao/server/', DevKakaoLoginServerView.as_view()), # 개발자 로그인
     path('kakao/login/callback/server/', DevKaKaoCallbackServerView.as_view()), # 개발자 로그인 콜백
+    path('mypage/like/', MyLikedPostView.as_view()), # 내가 좋아요 한 글
 ]

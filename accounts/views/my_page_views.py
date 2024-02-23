@@ -36,3 +36,18 @@ class MyPageView(APIView):
             }
         }
         return Response(res, status = status.HTTP_200_OK)
+    
+
+class MyLikedPostView(APIView):
+    """
+    내가 좋아요 한 글을 출력하는 뷰
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        posts = user.like_post.all()
+        serializer = PostListSerializer(posts.order_by('-created_at'), many = True, context = {'request':request})
+        
+        return Response(serializer.data, status = status.HTTP_200_OK)
