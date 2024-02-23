@@ -236,6 +236,7 @@ CRONJOBS = [
     ('0 0 1 * *', 'daily.cron.create_monthly_instance'),
     ('0 0 * * 1', 'daily.cron.create_weekly_instance'),
     ('0 0 * * *', 'daily.cron.create_daily_instance'),
+    ('0 0 * * *', 'daily.cron.select_popular_post'),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
