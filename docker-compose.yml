@@ -4,7 +4,7 @@ services:
     image: moc/server
     container_name: web
     command: bash -c "
-      while ! nc -z mysql_db 3306; do sleep 1; done && python manage.py cron add && gunicorn MoC.wsgi:application -b 0.0.0.0:8000" # 서버 실행
+      while ! nc -z mysql_db 3306; do sleep 1; done && python manage.py crontab add && gunicorn MoC.wsgi:application -b 0.0.0.0:8000" # 서버 실행
     ports:
       - "8000:8000"
     restart: always
