@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from .models import Comment
 from posts.models import Post
 from .serializers import CommentSerializer
+from posts.serializers import PostResponseSerializer
 
 @api_view(['GET', 'POST'])
 def comment_create_view(request, post_id):
@@ -19,11 +20,10 @@ def comment_create_view(request, post_id):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(post=post)
-            return Response({
-                "msg": "댓글 작성 성공",
-                "data": serializer.data
-            }, status=status.HTTP_201_CREATED)
+            post_response_serializer = PostResponseSerializer(post)
+            return Response(post_response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['DELETE'])
