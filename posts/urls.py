@@ -10,5 +10,6 @@ urlpatterns = [
     path('update/<int:post_id>/', PostUpdateView.as_view()), # 게시글 수정
     path('delete/<int:post_id>/', PostDeleteView.as_view()), # 게시글 삭제
     path('detail/<int:post_id>/', PostDetailView.as_view()), # 게시글 세부사항
-    path('list/<int:category_id>/', PostListView.as_view()),
+    path('list/<int:category_id>/', PostListView.as_view()), # 카테고리별 게시글 목록
+    path('like/<int:post_id>/', PostLikeView.as_view()),
 ]
