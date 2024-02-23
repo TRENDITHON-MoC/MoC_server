@@ -58,14 +58,9 @@ class PostListSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'title', 'thumbnail', 'created_at']
 
     def get_thumbnail(self, obj):
-        # first_image = obj.image.all().order_by('id').first()
-        # if not first_image:
-        #     return None
-        # return ImageResponseSerializer(first_image).data
         request = self.context.get('request')
         first_image = obj.image.all().order_by('id').first()
         if not first_image:
             return None
-        # ImageResponseSerializer에 context로 request를 전달합니다.
         serializer = ImageResponseSerializer(first_image, context={'request': request})
         return serializer.data
