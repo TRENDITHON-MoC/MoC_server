@@ -16,7 +16,7 @@ class PopularPostView(APIView):
         date = Daily.objects.prefetch_related('popular_post').get(day = yesterday)
         popular_posts = date.popular_post.all()
         posts = [pp.post for pp in popular_posts]
-        serializer = PostListSerializer(posts, many = True)
+        serializer = PostListSerializer(posts, many = True, context = {'request' : request})
         res = {
             "msg" : "인기글 리스트",
             "data" : serializer.data
