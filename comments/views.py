@@ -20,7 +20,7 @@ def comment_create_view(request, post_id):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(post=post)
-            post_response_serializer = PostResponseSerializer(post)
+            post_response_serializer = PostResponseSerializer(post, context = {'request':request})
             return Response(post_response_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
