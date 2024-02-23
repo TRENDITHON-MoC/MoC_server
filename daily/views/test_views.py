@@ -11,7 +11,7 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-class PoPularTestView(APIView):
+class PopularTestView(APIView):
     serializer_class = DateSerializer
     def post(self, request):
         serializer = DateSerializer(data = request.data)

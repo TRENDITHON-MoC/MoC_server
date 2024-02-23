@@ -5,5 +5,6 @@ app_name = 'daily'
 
 
 urlpatterns = [
-    path('select/', PoPularTestView.as_view()),
+    path('select/', PopularTestView.as_view()),
+    path('popular/yesterday/', PopularPostView.as_view()),
 ]
