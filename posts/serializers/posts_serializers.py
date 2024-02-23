@@ -41,7 +41,7 @@ class PostResponseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_comments(self, obj):
-        comments = obj.comments.filter(parent = None)
+        comments = obj.comments.all()
         serializer = CommentSerializer(comments, many = True)
         return serializer.data
 

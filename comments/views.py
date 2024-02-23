@@ -12,7 +12,7 @@ def comment_create_view(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
 
     if request.method == 'GET':
-        comments = Comment.objects.filter(parent=None, post=post)
+        comments = Comment.objects.filter(post=post)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
     
