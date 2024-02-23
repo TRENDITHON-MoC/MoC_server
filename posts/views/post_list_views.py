@@ -28,7 +28,10 @@ class PostListView(APIView):
     게시글 리스트 뷰
     """
     def get(self, request, category_id):
-        posts = Post.objects.filter(category__pk = category_id).order_by('-created_at')
+        if category_id == 0:
+            posts = Post.objects.all().order_by('-created_at')
+        else:
+            posts = Post.objects.filter(category__pk = category_id).order_by('-created_at')
         paginator = PostPageNumberPagination()
         page = paginator.paginate_queryset(posts, request)
 
