@@ -53,9 +53,10 @@ class PostResponseSerializer(serializers.ModelSerializer):
 
 class PostListSerializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
+    comment_cnt = serializers.SerializerMethodField()
     class Meta:
         model = Post
-        fields = ['id', 'user', 'title', 'thumbnail', 'created_at']
+        fields = ['id', 'user', 'title', 'thumbnail', 'like_cnt', 'comment_cnt', 'created_at']
 
     def get_thumbnail(self, obj):
         request = self.context.get('request')
@@ -64,3 +65,6 @@ class PostListSerializer(serializers.ModelSerializer):
             return None
         serializer = ImageResponseSerializer(first_image, context={'request': request})
         return serializer.data
+    
+    def get_comment_cnt(self, obj):
+        return obj.comments.count()
