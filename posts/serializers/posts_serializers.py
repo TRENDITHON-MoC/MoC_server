@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import *
-from comments.serializers import CommentSerializer
+from comments.serializers import CommentResponseSerializer
 
 class HashtagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,7 +42,7 @@ class PostResponseSerializer(serializers.ModelSerializer):
 
     def get_comments(self, obj):
         comments = obj.comments.all()
-        serializer = CommentSerializer(comments, many = True)
+        serializer = CommentResponseSerializer(comments, many = True)
         return serializer.data
 
     def get_hashtags(self, obj):
